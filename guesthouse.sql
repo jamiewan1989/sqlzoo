@@ -83,3 +83,16 @@ SELECT SUM(occupants)
 FROM booking
 WHERE booking_date + INTERVAL nights DAY > "2016-11-21" AND booking_date <= "2016-11-21";
 
+/* Q11 */
+SELECT last.last_name, substring_index(group_concat(last.first1 ORDER BY last.last_name),",",1),
+substring_index(group_concat(last.first1 ORDER BY last.last_name),",",-1)
+FROM (
+ SELECT DISTINCT a.last_name,a.first_name first1,b.first_name first2
+ FROM (SELECT * FROM booking bo JOIN guest g ON bo.guest_id = g.id) a, 
+      (SELECT * FROM booking bo JOIN guest g ON bo.guest_id = g.id) b
+ WHERE a.last_name = b.last_name AND a.first_name != b.first_name
+ AND (
+   (a.booking_date + INTERVAL a.nights DAY > b.booking_date) AND (a.booking_date<=b.booking_date)
+ OR (b.booking_date + INTERVAL b.nights DAY > a.booking_date) AND (b.booking_date<=a.booking_date))
+  ) last
+GROUP BY last_name;
