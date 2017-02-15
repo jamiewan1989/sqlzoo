@@ -62,4 +62,24 @@ ON ex.booking_id = b.booking_id
 WHERE b.booking_id = 5128; 
 
 /* Q8 */
+SELECT last_name,first_name, address, SUM(nights)
+FROM 
+    (SELECT last_name,first_name,address,COALESCE(nights,NULL,0) as nights
+    FROM booking
+    RIGHT JOIN guest
+    ON guest.id = booking.guest_id
+    WHERE address LIKE "Edinburgh%") as a
+GROUP BY a.last_name,a.first_name;
+
+
+/* Q9 */
+SELECT booking_date, COUNT(arrival_time)
+FROM booking
+WHERE booking_date BETWEEN "2016-11-25" AND "2016-12-01"
+GROUP BY booking_date;
+
+/* Q10 */
+SELECT SUM(occupants)
+FROM booking
+WHERE booking_date + INTERVAL nights DAY > "2016-11-21" AND booking_date <= "2016-11-21";
 
