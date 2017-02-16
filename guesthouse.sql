@@ -96,3 +96,19 @@ FROM (
  OR (b.booking_date + INTERVAL b.nights DAY > a.booking_date) AND (b.booking_date<=a.booking_date))
   ) last
 GROUP BY last_name;
+
+/* Q13 */
+SELECT longer.checkout_date, substring_index(group_concat(longer.counts ORDER BY longer.checkout_date),",",-1),
+    substring_index(substring_index(group_concat(longer.counts ORDER BY longer.checkout_date),",",2),",",-1),
+    substring_index(group_concat(longer.counts ORDER BY longer.checkout_date),",",1)
+FROM (
+  SELECT checkout_date,COUNT(*) counts
+  FROM (
+        SELECT (booking_date + INTERVAL nights DAY) as checkout_date,      
+                floor(room_no/100) as floor      
+        FROM booking
+        WHERE (booking_date + INTERVAL nights DAY) BETWEEN "2016-11-14" AND "2016-11-20"
+        ) as checkout
+  GROUP BY checkout_date, floor
+  ) longer
+GROUP BY checkout_date;
