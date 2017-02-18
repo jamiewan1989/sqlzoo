@@ -97,7 +97,7 @@ FROM (
   ) last
 GROUP BY last_name;
 
-/* Q13 */
+/* Q12 */
 SELECT longer.checkout_date, substring_index(group_concat(longer.counts ORDER BY longer.checkout_date),",",-1),
     substring_index(substring_index(group_concat(longer.counts ORDER BY longer.checkout_date),",",2),",",-1),
     substring_index(group_concat(longer.counts ORDER BY longer.checkout_date),",",1)
@@ -112,3 +112,22 @@ FROM (
   GROUP BY checkout_date, floor
   ) longer
 GROUP BY checkout_date;
+
+
+/* Q13 */
+SELECT dates.dates, b_table.last_name
+FROM (
+    SELECT distinct booking_date as dates
+    FROM booking
+    WHERE booking_date BETWEEN '2016-11-21' and '2016-11-27'
+    ORDER BY booking_date
+    ) dates 
+LEFT JOIN 
+    (SELECT last_name,booking_date,nights,(booking_date + INTERVAL nights DAY) as checkout_date
+     FROM booking a
+     JOIN guest b
+     ON a.guest_id = b.id
+     WHERE room_no = 207
+     ) b_table
+ON dates.dates >= b_table.booking_date AND dates.dates<b_table.checkout_date;
+
