@@ -131,3 +131,24 @@ LEFT JOIN
      ) b_table
 ON dates.dates >= b_table.booking_date AND dates.dates<b_table.checkout_date;
 
+
+/* Q14 */ 
+SELECT room_no, prev_checkout_date
+FROM (
+SELECT *,(booking_date + INTERVAL nights DAY) as checkout_date, @rownum:=@rownum + 1 as rank1
+FROM booking, (SELECT @rownum:= 0) as r
+ORDER BY room_no, booking_date
+)  main
+JOIN (
+  SELECT (booking_date + INTERVAL nights DAY) as prev_checkout_date, @rownum2 := @rownum2 + 1 as rank2
+  FROM booking, (SELECT @rownum2:=1) as rank2
+  ORDER BY room_no, booking_date
+) prev
+ON main.rank1 = prev.rank2
+WHERE  (TO_DAYS(booking_date) - TO_DAYS(prev_checkout_date)) >= 7;
+
+
+/* Q15 */
+
+
+
