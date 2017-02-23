@@ -39,3 +39,24 @@ JOIN Product d
   ON c.ProductID = d.ProductID
 WHERE d.Name = 'Racing Socks, L'
   AND companyname = 'Riding Cycles'
+  
+ /* Q6 */
+SELECT  a.SalesOrderID, count(*)
+FROM SalesOrderHeader a
+JOIN SalesOrderDetail b
+  ON a.SalesOrderID = b.SalesOrderID
+GROUP BY a.SalesOrderID
+Having COUNT(a.SalesOrderID) =1;
+
+/* Q7 */
+SELECT d.name, companyname
+FROM SalesOrderHeader a
+JOIN Customer b
+  ON a.CustomerID = b.CustomerID
+JOIN SalesOrderDetail c
+  ON a.SalesOrderID = c.SalesOrderID
+JOIN Product d
+  ON c.ProductID = d.ProductID
+JOIN ProductModel e
+  ON d.ProductModelID = e.ProductModelID 
+WHERE e.name= 'Racing Socks';
