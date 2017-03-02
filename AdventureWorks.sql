@@ -60,3 +60,17 @@ JOIN Product d
 JOIN ProductModel e
   ON d.ProductModelID = e.ProductModelID 
 WHERE e.name= 'Racing Socks';
+
+/* Q10 */
+SELECT sum(c.OrderQty)
+FROM SalesOrderHeader a
+JOIN Address b
+  ON a.ShipToAddressID = b.AddressID
+JOIN SalesOrderDetail c
+  ON a.SalesOrderID = c.SalesOrderID
+JOIN Product d
+  ON c.ProductID = d.ProductID
+JOIN ProductCategory e
+  ON d.ProductCategoryID = e.ProductCategoryID
+WHERE b.City = "London"
+  AND e.Name = 'Cranksets';
