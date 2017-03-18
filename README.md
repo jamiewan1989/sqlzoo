@@ -1,3 +1,3 @@
 # sqlzoo
 
-This folder includes my sqlzoo assessment solutions
+this is another version 
